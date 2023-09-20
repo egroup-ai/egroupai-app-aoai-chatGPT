@@ -1,0 +1,79 @@
+# Set the variables
+$pat = "YOUR_PERSONAL_ACCESS_TOKEN"
+$organization = "YOUR_ORGANIZATION_NAME"
+$project = "YOUR_PROJECT_NAME"
+$templatePath = "PATH_TO_THE_JSON_TEMPLATE"
+$epicTitle = "Epic Title"
+$featureTitle = "Feature Title"
+$storyTitle = "Story Title"
+
+# Authenticate
+$base64authinfo = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(":$($pat)"))
+$headers = @{
+    "Authorization" = "Basic $base64authinfo"
+    "Content-Type" = "application/json"
+}
+
+# Create the Epic work item
+$body = Get-Content -Path $templatePath -Raw
+$body = $body -replace '_EpicTitle_', $epicTitle
+$createEpicUrl = "https://dev.azure.com/$organization/$project/_apis/wit/workitems/$([guid]::NewGuid())?api-version=6.0"
+$response = Invoke-RestMethod -Uri $createEpicUrl -Method POST -Headers $headers -Body $body
+
+# Extract the Epic work item ID
+$epicId = $response.id
+
+# Create the Feature work item under the Epic
+$body = Get-Content -Path $templatePath -Raw
+$body = $body -replace '_EpicId_', $epicId
+$body = $body -replace '_FeatureTitle_', $featureTitle
+$createFeatureUrl = "https://dev.azure.com/$organization/$project/_apis/wit/workitems/$([guid]::NewGuid())?api-version=6.0"
+$response = Invoke-RestMethod -Uri $createFeatureUrl -Method POST -Headers $headers -Body $body
+
+# Create the Story work item under the Feature
+$body = Get-Content -Path $templatePath -Raw
+$body = $body -replace '_FeatureId_', $response.id
+$body = $body -replace '_StoryTitle_', $storyTitle
+$createStoryUrl = "https://dev.azure.com/$organization/$project/_apis/wit/workitems/$([guid]::NewGuid())?api-version=6.0"
+$response = Invoke-RestMethod -Uri $createStoryUrl -Method POST -Headers $headers -Body $body
+
+# Extract the Story work item ID
+$storyId = $response.id
+
+Write-Output "Epic, Feature, and Story work items created successfully!"
+
+
+
+
+{
+  "op": "add",
+  "path": "/fields/System.WorkItemType",
+  "value": "Epic"
+},
+{
+  "op": "add",
+  "path": "/fields/System.Title",
+  "value": "_EpicTitle_"
+},
+{
+  "op": "add",
+  "path": "/relations/-",
+  "value": {
+    "rel": "System.LinkTypes.Hierarchy-Reverse",
+    "url": "_EpicId_",
+    "attributes": {
+      "comment": "Relates"
+    }
+  }
+},
+{
+  "op": "add",
+  "path": "/relations/-",
+  "value": {
+    "rel": "System.LinkTypes.Hierarchy-Forward",
+    "url": "_FeatureId_",
+    "attributes": {
+      "comment": "Child"
+    }
+  }
+}
