@@ -35,11 +35,12 @@ export const ShareButton: React.FC<ShareButtonProps> = ({onClick}) => {
                 styles={shareButtonStyles}
                 iconProps={{ iconName: 'Share' }}
                 onClick={onClick}
-                text="Share"
+                text="Linky"
         />
       )
 }
 
+// Chat History
 interface HistoryButtonProps extends IButtonProps {
     onClick: () => void;
     text: string;
@@ -48,8 +49,10 @@ interface HistoryButtonProps extends IButtonProps {
 export const HistoryButton: React.FC<HistoryButtonProps> = ({onClick, text}) => {
     const historyButtonStyles: ICommandBarStyles & IButtonStyles = {
         root: {
-            width: '180px',
+            width: '140px',
             border: `1px solid #D1D1D1`,
+            background: '#b5e4eb',
+            borderRadius: 9,
           },
           rootHovered: {
             border: `1px solid #D1D1D1`,
@@ -67,4 +70,35 @@ export const HistoryButton: React.FC<HistoryButtonProps> = ({onClick, text}) => 
             styles={historyButtonStyles}
         />
       )
+}
+
+interface SessionHistoryButtonProps extends IButtonProps {
+  onClick: () => void;
+  text: string;
+}
+// Session History
+export const SessionHistoryButton: React.FC<SessionHistoryButtonProps> = ({onClick, text}) => {
+  const sessionHistoryButtonStyles: ICommandBarStyles & IButtonStyles = {
+      root: {
+          width: '140px',
+          border: `1px solid #D1D1D1`,
+          background: '#0ac9e2',
+          borderRadius: 9,
+        },
+        rootHovered: {
+          border: `1px solid #D1D1D1`,
+        },
+        rootPressed: {
+          border: `1px solid #D1D1D1`,
+        },
+    };
+
+    return (
+      <DefaultButton
+          text={text}
+          iconProps={{ iconName: 'More' }}
+          onClick={onClick}
+          styles={sessionHistoryButtonStyles}
+      />
+    )
 }

@@ -47,6 +47,9 @@ export const Answer = ({
                 citationFilename = `${citation.filepath} - Part ${parseInt(citation.chunk_id) + 1}`;
             }
         }
+        else if (citation.filepath && citation.reindex_id) {
+            citationFilename = `${citation.filepath} - Part ${citation.reindex_id}`;
+        }
         else {
             citationFilename = `Citation ${index}`;
         }
@@ -89,7 +92,7 @@ export const Answer = ({
                     </Stack.Item>
                 )}
                 <Stack.Item className={styles.answerDisclaimerContainer}>
-                    <span className={styles.answerDisclaimer}>AI-generated content may be incorrect</span>
+                    <span className={styles.answerDisclaimer}>ai, but your data cited</span>
                 </Stack.Item>
                 </Stack>
                 {chevronIsExpanded && 

@@ -29,6 +29,7 @@ import {
 import { Answer } from "../../components/Answer";
 import { QuestionInput } from "../../components/QuestionInput";
 import { ChatHistoryPanel } from "../../components/ChatHistory/ChatHistoryPanel";
+// import { SessionHistoryPanel } from "../../components/SessionHistory/SessionHistoryPanel";
 import { AppStateContext } from "../../state/AppProvider";
 import { useBoolean } from "@fluentui/react-hooks";
 
@@ -544,7 +545,7 @@ const Chat = () => {
                                     className={styles.chatIcon}
                                     aria-hidden="true"
                                 />
-                                <h1 className={styles.chatEmptyStateTitle}>Ask your side-loaded data</h1>
+                                <h1 className={styles.chatEmptyStateTitle}>Your data aside ai</h1>
                                 <h2 className={styles.chatEmptyStateSubtitle}>This machine is setup to reference and cite your data ...</h2>
                             </Stack>
                         ) : (
@@ -641,7 +642,7 @@ const Chat = () => {
                                     }}
                                     className={appStateContext?.state.isCosmosDBAvailable?.status !== CosmosDBStatus.NotConfigured ? styles.clearChatBroom : styles.clearChatBroomNoCosmos}
                                     iconProps={{ iconName: 'Broom' }}
-                                    onClick={clearChat}
+                                    onClick={appStateContext?.state.isCosmosDBAvailable?.status !== CosmosDBStatus.NotConfigured ? clearChat : newChat}
                                     disabled={disabledButton()}
                                     aria-label="clear chat button"
                                 />
@@ -686,7 +687,7 @@ const Chat = () => {
                 {(appStateContext?.state.isChatHistoryOpen && appStateContext?.state.isCosmosDBAvailable?.status !== CosmosDBStatus.NotConfigured) && <ChatHistoryPanel/>}
                 </Stack>
             )}
-        </div>
+        </div>        
     );
 };
 

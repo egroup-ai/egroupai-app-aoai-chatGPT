@@ -4,7 +4,7 @@ import egroupai from "../../assets/ai-execution-group-transparent.png";
 import { CopyRegular, ShareRegular } from "@fluentui/react-icons";
 import { CommandBarButton, Dialog, Stack, TextField, ICommandBarStyles, IButtonStyles, DefaultButton  } from "@fluentui/react";
 import { useContext, useEffect, useState } from "react";
-import { HistoryButton, ShareButton } from "../../components/common/Button";
+import { HistoryButton, SessionHistoryButton} from "../../components/common/Button";
 import { AppStateContext } from "../../state/AppProvider";
 import { CosmosDBStatus } from "../../api";
 
@@ -70,8 +70,13 @@ const Layout = () => {
         <div className={styles.layout}>
             <header className={styles.header} role={"banner"}>
                 <Stack horizontal verticalAlign="center" horizontalAlign="space-between"
-                // className={styles.headerContainer}
+                 className={styles.headerContainer}
                 >
+                    <Stack horizontal tokens={{ childrenGap: 4 }}>
+                            {(appStateContext?.state.isCosmosDBAvailable?.status !== CosmosDBStatus.NotConfigured) && 
+                                <SessionHistoryButton onClick={handleHistoryClick} text={appStateContext?.state?.isChatHistoryOpen ? "Hide" : "Sessions"}/>    
+                            }
+                    </Stack>
                     <Stack horizontal verticalAlign="center">
                         <img
                             src={egroupai}
@@ -84,9 +89,9 @@ const Layout = () => {
                     </Stack>
                     <Stack horizontal tokens={{ childrenGap: 4 }}>
                             {(appStateContext?.state.isCosmosDBAvailable?.status !== CosmosDBStatus.NotConfigured) && 
-                                <HistoryButton onClick={handleHistoryClick} text={appStateContext?.state?.isChatHistoryOpen ? "Hide chat history" : "Show chat history"}/>    
+                                <HistoryButton onClick={handleHistoryClick} text={appStateContext?.state?.isChatHistoryOpen ? "Hide chats" : "Past chats"}/>    
                             }
-                            <ShareButton onClick={handleShareClick} />
+                            {/* <ShareButton onClick={handleShareClick} /> */}
                     </Stack>
 
                 </Stack>
